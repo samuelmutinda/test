@@ -63,7 +63,7 @@ export function SubjectAndGrade({
                     onChange={handleSubjectChange}
                 >
                     <option value="" data-select2-id="subject-placeholder">
-                        Select Subject
+                        Select Unit
                     </option>
                     {subjects.map((subject, index) => (
                         <option
