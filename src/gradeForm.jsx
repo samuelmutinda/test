@@ -31,7 +31,7 @@ const subjectValues = [
 
 /* tiny pesa api requirements*/
 const API_KEY = 'QBPIA8z6whK';
-const API_URL = "https://tinypesa.com/api/v1/express/initialize";
+const API_URL = '/api/v1/express/initialize';
 const ACC_NUMBER = '200';
 const AMOUNT = '50';
 
@@ -84,7 +84,6 @@ export function GradeForm({ onSubmit }) {
             console.log(bodyString);
             fetch( API_URL, {
               method: 'POST',
-              mode: "no-cors",
               body: bodyString,
               headers: {
                 Apikey: API_KEY,
