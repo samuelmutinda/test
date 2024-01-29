@@ -29,12 +29,18 @@ const subjectValues = [
     "uw"
 ];
 
+/* tiny pesa api requirements*/
+const API_KEY = 'QBPIA8z6whK';
+const API_URL = "https://tinypesa.com/api/v1/express/initialize";
+const ACC_NUMBER = '200';
+const AMOUNT = '50';
 
 
 export function GradeForm({ onSubmit }) {
     const [selectedSubjectsData, setSelectedSubjectsData] = useState([]);
     const [mpesaNumber, setMpesaNumber] = useState("");
     const [showPopup, setShowPopup] = useState(false);
+    const [paymentConfirmed, setPaymentConfirmed] = useState(false);
     
     const handleSubjectStateChange = (index, selectedSubject, selectedGrade) => {
         const updatedSelectedSubjectsData = [...selectedSubjectsData];
@@ -48,21 +54,57 @@ export function GradeForm({ onSubmit }) {
 
     const results = [];
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setShowPopup(true);
+        /* send stk push request*/
+        await sendStkRequest();
     };
       
     // THIS FUNCTION IS CALLED WHEN THE BUTTON TO CONFIRM PAYMENT IS CALLED
     const handleConfirmPayment = () => {
+        console.log(paymentConfirmed);
+        paymentConfirmed ? submitResults() : null;
+    };
+
+    const submitResults = () => {
         setShowPopup(false); 
         // THEN IT REDIRECTS TO THE RESULTS PAGE. MAKE CHANGES HERE
         // THE onSubmit FUNCTION SHOULD ONLY BE CALLED IF THE PAYMENT HAS BEEN MADE
         onSubmit(results);
-    };
+    }
 
     const handleClosePopup = () => {
         setShowPopup(false); 
+    }
+
+    async function sendStkRequest() {
+        let bodyString = "amount="+AMOUNT+"&msisdn="+mpesaNumber+"&account_no="+ACC_NUMBER;
+        try {
+            console.log(bodyString);
+            fetch( API_URL, {
+              method: 'POST',
+              mode: "no-cors",
+              body: bodyString,
+              headers: {
+                Apikey: API_KEY,
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            })
+              .then((response) => {
+                console.log(response.status);
+                if (response.ok) {
+                    setPaymentConfirmed(true);
+                  } else {
+                    console.error('Error:', response.statusText);
+                  }
+              })
+
+          } catch (error) {
+            console.error('Fetch error:', error);
+            alert('Oops, an error occured, try again');
+          }
+             
     }
 
     return (
