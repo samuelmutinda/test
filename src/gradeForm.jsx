@@ -82,29 +82,29 @@ export function GradeForm({ onSubmit }) {
         let bodyString = "amount="+AMOUNT+"&msisdn="+mpesaNumber+"&account_no="+ACC_NUMBER;
         try {
             console.log(bodyString);
-            fetch( API_URL, {
+            fetch( 'https://tinypesa.com/api/v1/express/initialize', { // Absolute backend URL
               method: 'POST',
               body: bodyString,
               headers: {
                 Apikey: API_KEY,
                 "Content-Type": "application/x-www-form-urlencoded",
-            },
+              },
             })
               .then((response) => {
                 console.log(response.status);
                 if (response.ok) {
                     setPaymentConfirmed(true);
-                  } else {
+                } else {
                     console.error('Error:', response.statusText);
-                  }
+                }
               })
-
-          } catch (error) {
+    
+        } catch (error) {
             console.error('Fetch error:', error);
             alert('Oops, an error occured, try again');
-          }
-             
+        }        
     }
+    
 
     return (
         <>
